@@ -1,0 +1,11 @@
+{
+  "name": "Localserve",
+  "description": "Chrome extension for localserve. See http://github.com/luke/localserve. Use at your own risk.",
+  "version": "0.1",
+  "background": { "scripts": ["background.js"] },
+  "browser_action": {
+      "name": "Click to open in server"
+  },
+  "permissions": ["tabs"],
+  "manifest_version": 2
+}

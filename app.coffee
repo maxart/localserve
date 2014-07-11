@@ -28,6 +28,7 @@ staticServerForPort = (port)->
     if staticServer.port == port
       return staticServer
 
+
 respond = (req, res, next) -> 
 
   fullpath = req.path()
@@ -57,16 +58,48 @@ server.del('/_servers/:port', (req, res, next)->
   staticServer = staticServerForPort(port)
   if staticServer
     console.log("killing static server on port #{port}")
-    staticServer.httpServer.close(->
-      delete staticServers[staticServer.dirname]
-      res.send(204)
-      next()
-    )
+    staticServer.httpServer.close()
+    delete staticServers[staticServer.dirname]
+    res.send(204)
+    next()
   else 
     console.log("no static server found for port #{port}")
     res.send(404)
     next()
 )
+
+server.get('/_servers/:port/kill/:file', (req, res, next)->
+  port = parseInt(req.params.port)
+  filename = req.params.file 
+  staticServer = staticServerForPort(port)
+  if staticServer
+    console.log("killing static server on port #{port}")
+    staticServer.httpServer.close()
+    delete staticServers[staticServer.dirname]
+    location = "file://#{staticServer.dirname}/#{filename}"
+    # location = 'chrome://version'
+    # res.header('Location', location)
+
+    body = "<body style='background:red'></body>"
+    res.writeHead(200, {
+      'Content-Length': Buffer.byteLength(body)
+      'Content-Type': 'text/html'
+    })
+    res.write(body)
+    res.end()
+
+    # res.contentType = 'text/html';
+    # res.header('Content-Type', 'text/html')
+    # res.send(200, )
+    # console.log("sending redirect to.. #{location}")
+    next()
+  else 
+    console.log("no static server found for port #{port}")
+    res.send(404)
+    next()
+)
+
+
 
 server.get(/(.*)/, respond)
 server.head(/(.*)/, respond)
