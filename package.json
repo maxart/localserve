@@ -1,0 +1,17 @@
+{
+  "name": "localserve",
+  "version": "0.0.1",
+  "description": "Local web server for static files controllable via chrome extension",
+  "devDependencies": {
+    "nodemon": "^1.2.1"
+  },
+  "dependencies": {
+    "coffee-script": "^1.7.1",
+    "connect": "*",
+    "node-static": "^0.7.3",
+    "restify": "^2.8.1"
+  },
+  "scripts": {
+    "start": "nodemon app.coffee"
+  }
+}
