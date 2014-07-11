@@ -2,6 +2,10 @@
   "name": "localserve",
   "version": "0.0.1",
   "description": "Local web server for static files controllable via chrome extension",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/luke/localserve.git"
+  },
   "devDependencies": {
     "nodemon": "^1.2.1"
   },
