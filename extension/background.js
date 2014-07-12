@@ -1,52 +1,54 @@
-
 function localServe(tab) {
-  if(tab.url.indexOf('file:///') == 0){
-	var url = tab.url.replace('file://','http://127.0.0.1:9123');
-  	chrome.tabs.update(tab.id, {url: url});  	
-  } else {
-  	var urlParts = tab.url.split("/"); 
-  	var port = urlParts[2].split(":")[1]; 
-  	var path = urlParts.slice(3).join("/"); 
-  	var url = "http://127.0.0.1:9123/_servers/"+port+"/kill/"+path;  
-	chrome.tabs.update(tab.id, {url: url});
-	setTimeout(function(){
-		chrome.tabs.remove(tab.id); 
-	},500);
+  if(tab.url.indexOf('file:///') == 0) {
+    var url = tab.url.replace('file://','http://127.0.0.1:9123');
+    chrome.tabs.update(tab.id, {url: url});
+  }
+  if(tab.url.indexOf('file://localhost/') == 0) {
+    var url = tab.url.replace('file://localhost','http://127.0.0.1:9123');
+    chrome.tabs.update(tab.id, {url: url});
+  }
+  else {
+    var urlParts = tab.url.split("/");
+    var port = urlParts[2].split(":")[1];
+    var path = urlParts.slice(3).join("/");
+    var url = "http://127.0.0.1:9123/_servers/"+port+"/kill/"+path;
+    chrome.tabs.update(tab.id, {url: url});
+    setTimeout(function(){
+      chrome.tabs.remove(tab.id);
+    },500);
   }
 }
 
 function updateIcon(tab) {
-	var icon; 
-	if(tab.url.indexOf('file:///') == 0){
-		icon = "icon2.png";
-		chrome.browserAction.enable(tab.tabId);
-	} else {
-		if(tab.url.indexOf('http://127.0.0.1:92') == 0){
-			icon = "icon1.png";
-			chrome.browserAction.enable(tab.tabId);
-		} else {
-			icon = "icon4.png";
-			chrome.browserAction.disable(tab.tabId);
-		}
-	}
-	chrome.browserAction.setIcon({path:icon});
+  var icon;
+  if(tab.url.indexOf('file:///') == 0 || tab.url.indexOf('file://') == 0){
+    icon = "icon2.png";
+    chrome.browserAction.enable(tab.tabId);
+  } else {
+    if(tab.url.indexOf('http://127.0.0.1:92') == 0){
+      icon = "icon1.png";
+      chrome.browserAction.enable(tab.tabId);
+    } else {
+      icon = "icon4.png";
+      chrome.browserAction.disable(tab.tabId);
+    }
+  }
+  chrome.browserAction.setIcon({path:icon});
 }
 
 chrome.browserAction.setIcon({path:"icon4.png"});
-
 chrome.browserAction.onClicked.addListener(localServe);
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   updateIcon(tab);
 });
 
-chrome.tabs.onCreated.addListener(function(tabId, changeInfo, tab) {         
-   updateIcon(tab);
+chrome.tabs.onCreated.addListener(function(tabId, changeInfo, tab) {
+  updateIcon(tab);
 });
 
-chrome.tabs.onActivated.addListener(function(activeInfo) { 
-	   chrome.tabs.get(activeInfo.tabId, function(tab){
-   	   updateIcon(tab);
-   }); 
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  chrome.tabs.get(activeInfo.tabId, function(tab){
+    updateIcon(tab);
+  });
 });
-
