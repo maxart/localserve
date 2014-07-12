@@ -1,4 +1,4 @@
 localserve
 ==========
 
-Local web server for static files controllable via chrome extension
+Local Web server for static files, controllable via a Chrome extension.
