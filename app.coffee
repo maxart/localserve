@@ -76,7 +76,7 @@ server.get('/_servers/:port/kill/:file', (req, res, next)->
     staticServer.httpServer.close()
     delete staticServers[staticServer.dirname]
     location = "file://#{staticServer.dirname}/#{filename}"
-    body = "<body style='background:red'></body>"
+    body = "<style>@-webkit-keyframes bgcolor {0% {background:red;} 100% {background:#FFF;}} @keyframes bgcolor {0% {background:red;} 100% {background:#FFF;}}</style><body style='-moz-animation: bgcolor .25s;-webkit-animation: bgcolor .25s; animation: bgcolor .25s;'></body>"
     res.writeHead(200, {
       'Content-Length': Buffer.byteLength(body)
       'Content-Type': 'text/html'
