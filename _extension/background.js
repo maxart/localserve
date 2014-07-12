@@ -3,7 +3,7 @@ function localServe(tab) {
     var url = tab.url.replace('file://','http://127.0.0.1:9123');
     chrome.tabs.update(tab.id, {url: url});
   }
-  if(tab.url.indexOf('file://localhost/') == 0) {
+  else if(tab.url.indexOf('file://localhost/') == 0) {
     var url = tab.url.replace('file://localhost','http://127.0.0.1:9123');
     chrome.tabs.update(tab.id, {url: url});
   }
@@ -22,21 +22,21 @@ function localServe(tab) {
 function updateIcon(tab) {
   var icon;
   if(tab.url.indexOf('file:///') == 0 || tab.url.indexOf('file://') == 0){
-    icon = "icon2.png";
+    icon = "icon-on.png";
     chrome.browserAction.enable(tab.tabId);
   } else {
     if(tab.url.indexOf('http://127.0.0.1:92') == 0){
-      icon = "icon1.png";
+      icon = "icon-off.png";
       chrome.browserAction.enable(tab.tabId);
     } else {
-      icon = "icon4.png";
+      icon = "icon-disabled.png";
       chrome.browserAction.disable(tab.tabId);
     }
   }
   chrome.browserAction.setIcon({path:icon});
 }
 
-chrome.browserAction.setIcon({path:"icon4.png"});
+chrome.browserAction.setIcon({path:"icon-disabled.png"});
 chrome.browserAction.onClicked.addListener(localServe);
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
