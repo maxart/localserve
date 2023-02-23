@@ -8,7 +8,13 @@ staticServerPort = 9200
 
 startStaticServer = (dirname) ->
   staticServerPort += 1
-  fileServer = new nodeStatic.Server(dirname)
+  fileServer = new nodeStatic.Server(dirname,
+    headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+       "Expires": 0
+     }
+  )
   staticServer = {
     port: staticServerPort
     dirname: dirname
